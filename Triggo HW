@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <math.h>
+float trigo (int, int); 
+int main()
+{
+    float ans = trigo(3,4);
+    printf("%f", ans);
+    
+
+    return 0;
+}
+
+float trigo (int x, int y) {
+        int a;
+        
+    a=sqrt((x*x)+(y*y));
+    
+        
+    return a;    
+    }
+
