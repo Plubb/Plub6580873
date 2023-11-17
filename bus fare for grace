@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TOTAL_STATIONS 21
+#define DESTINATION_STATION 21
+
+void displayStations(int currentStation, int remainingStations) {
+    printf("Bus Line 124 - Thailand\n");
+    printf("Current Station: %d\n", currentStation);
+    printf("Remaining Stations: %d\n", remainingStations);
+}
+
+int calculateCost(int remainingStations) {
+    int cost;
+
+    if (remainingStations >= 1 && remainingStations <= 10) {
+        cost = 15;
+    } else if (remainingStations >= 11 && remainingStations <= 15) {
+        cost = 20;
+    } else {
+        cost = 25;
+    }
+
+    return cost;
+}
+
+int main() {
+    int userStation;
+    int remainingStations;
+
+    while (1) {
+        printf("\nEnter the station number you are at (Enter 0 to exit): ");
+        scanf("%d", &userStation);
+
+        if (userStation == 0) {
+            printf("Exiting the application. Goodbye!\n");
+            break;
+        }
+
+        if (userStation < 1 || userStation > TOTAL_STATIONS) {
+            printf("Invalid station number. Please enter a valid station number.\n");
+            continue;
+        }
+
+        remainingStations = DESTINATION_STATION - userStation;
+
+        displayStations(userStation, remainingStations);
+
+        if (userStation == DESTINATION_STATION) {
+            printf("You have reached Mahidol University (Station %d), the final station.\n", DESTINATION_STATION);
+        } else {
+            printf("You can take Bus 124 to reach Mahidol University (Station %d).\n", DESTINATION_STATION);
+
+            // Calculate and display cost
+            int cost = calculateCost(remainingStations);
+            printf("Estimated cost to Mahidol University: %d bath\n", cost);
+        }
+    }
+
+    return 0;
+}
