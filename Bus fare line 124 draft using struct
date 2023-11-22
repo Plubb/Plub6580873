@@ -1,0 +1,78 @@
+#include <stdio.h>
+
+// Define a struct to represent a station
+typedef struct {
+    int number;
+    double fare;
+} Station;
+
+// Function to calculate the fare based on the station number
+double calculateFare(const Station stations[], int stationNumber, int numStations) {
+    for (int i = 0; i < numStations; i++) {
+        if (stationNumber == stations[i].number) {
+            return stations[i].fare;
+        }
+    }
+    return 0.00; // Default fare for unknown stations
+}
+
+int main() {
+    const int numStations = 41; // Maximum number of stations
+    Station stations[numStations];
+
+    // Initialize station information
+    for (int i = 0; i < numStations; i++) {
+        stations[i].number = i + 1;
+
+        if (i + 1 >= 1 && i + 1 <= 20) {
+            stations[i].fare = 25.00;
+        } else if (i + 1 >= 21 && i + 1 <= 30) {
+            stations[i].fare = 20.00;
+        } else if (i + 1 >= 31 && i + 1 <= 41) {
+            stations[i].fare = 25.00;
+        }
+    }
+
+    int stationNumber;
+    double totalFare = 0.00;
+    int remainingStations = numStations;
+
+    printf("Welcome to Bus Fare Calculator for Bus Line 124\n");
+
+    // Prompt the user for the station number until Mahidol University is reached
+    while (1) {
+        // Get the station number from the user
+        printf("Enter the station number (1 to %d, 0 to exit): ", numStations);
+        scanf("%d", &stationNumber);
+
+        if (stationNumber == 0) {
+            // Exit the loop if the user enters 0
+            break;
+        }
+
+        // Calculate the fare for the current station
+        double stationFare = calculateFare(stations, stationNumber, numStations);
+
+        // Check if the station is valid
+        if (stationFare > 0.00) {
+            // Accumulate the total fare
+            totalFare += stationFare;
+
+            // Decrement the remaining stations
+            remainingStations--;
+
+            // Display the remaining stations and total fare
+            printf("Remaining stations: %d\n", remainingStations);
+            printf("Fare for Station %d: %.2f baht\n", stationNumber, stationFare);
+            printf("Total fare so far: %.2f baht\n", totalFare);
+        } else {
+            printf("Cannot calculate fare. Please check the station number.\n");
+        }
+    }
+
+    // Display the final total fare
+    printf("\nThank you for using Bus Fare Calculator.\n");
+    printf("Total fare for the journey: %.2f baht\n", totalFare);
+
+    return 0;
+}
