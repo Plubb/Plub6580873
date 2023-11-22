@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MAX_STATION_NAME_LENGTH 100
+#define NUM_STATIONS 41
+
 // Define a struct to represent a station
 typedef struct {
     int number;
-    char name[50];
+    char name[MAX_STATION_NAME_LENGTH];
     double fare;
 } Station;
 
@@ -18,21 +21,51 @@ double calculateFare(const Station stations[], int stationNumber, int numStation
     return 0.00; // Default fare for unknown stations
 }
 
+// Function to display a welcome message
+void displayWelcomeMessage() {
+    printf("*************************************************\n");
+    printf("*                                               *\n");
+    printf("*   Welcome to Bus Fare Calculator for Bus 124  *\n");
+    printf("*                                               *\n");
+    printf("*************************************************\n\n");
+}
+
+// Function to display the menu
+void displayMenu() {
+    printf("\n-------------------------------------------------\n");
+    printf("Enter the station number (1 to %d) or 0 to exit: ", NUM_STATIONS);
+}
+
+// Function to display the final thank you message
+void displayThankYouMessage(double totalFare) {
+    printf("\n*************************************************\n");
+    printf("*                                               *\n");
+    printf("*      Thank you for using Bus Fare Calculator   *\n");
+    printf("*                                               *\n");
+    printf("*************************************************\n");
+    printf("Total fare for the journey: %.2f baht\n\n", totalFare);
+}
+
 int main() {
-    const int numStations = 41; // Maximum number of stations
-    Station stations[numStations];
+    Station stations[NUM_STATIONS];
 
     // Initialize station information
-    char *stationNames[numStations] = {
-        "Station1 : Sanam Luang (Thammasat U.)", "Station2 : Tha Phra Chan (Opposite WAT Mahathat)", "Station3 : Maharaj Pier", "Station4 : Wat Phra Kaew (Tha Chang Pier)",
-        "Station5 : Sanam Luang (Court Of Justice)", // ... Add more station names as needed
-        "Station31", "Station32", "Station33", "Station34", "Station35", // ... Add more station names as needed
-        "MahidolUniversity" // Example name for the last station
+    char stationNames[NUM_STATIONS][MAX_STATION_NAME_LENGTH] = {
+        "Station1 : Car launch station, Sanam Luang", "Station2 : Sanam Luang (opposite Thammasat University)", "Station3 : Sanam Luang (opposite Wat Mahathat)", "Station4 : Sanam Luang (opposite the Supreme Court) Stop 1",
+        "Station5 : Sanam Luang (opposite the Supreme Court) Stop 2", "Station6 : Phra Pinklao Bridge (outbound)", "Station7 : Opposite Pata Pinklao", "Station8 : Borommaratchachonnani Intersection",
+        "Station9 : Tesco Lotus Pinklao", "Station10 : Central Pinklao", "Station11 : Opposite Lumpini Pinklao Condo", "Station12 : Chao Phraya Hospital", "Station13 : Before reaching Sai Tai Pinklao",
+        "Station14 : Soi Borommaratchachonnani 35", "Station15 : Soi Borommaratchachonnani 45", "Station16 : Cedar Mansion", "Station17 : Taling Chan Police Station", "Station18 : Ratchaphruek-Boromarajonani Intersection 1",
+        "Station19 : Dusit District Court", "Station20 : Taling Chan Provincial Prosecutor's Office", "Station21 : Photisan School (Soi Wat Makok)", "Station22 : Piamrak Village", "Station23 : Sai Tai Mai Bus Terminal (Taling Chan)", "Station24 : Baan Phanu (Soi Borommaratchachonnani 91)",
+        "Station25 : Thonburi Hospital 2", "Station26 : Opposite Metropolitan Police Division 7", "Station27 : Opposite the Sky Parallel Police Station", "Station28 : Krisada Nakhon Village 20", "Station29 : Boonthavorn Borommaratchachonnani Shop", "Station30 : Opposite Amornchai Village 3",
+        "Station31 : Phutthamonthon Sai 3-Borommaratchachonnani (outbound)", "Station32 : Shrine, Ford Phutthamonthon", "Station33 : Opposite Ploy Kaew Kindergarten School", "Station34 : Ladawan Village", "Station35 : Dhamma Sabha Book Center", 
+        "Station36 : Opposite Suktawee Village", "Station37 : Soi Borommaratchachonnani 121, Pansaprueksa Village", "Station38 : Sakulthip Borommaratchachonnani Village 123", "Station39 : Buddhist Market,", "Station40 : Mahidol University, Salaya District, Gate 3", 
+        "MahidolUniversity Gate 4" 
     };
 
-    for (int i = 0; i < numStations; i++) {
+    for (int i = 0; i < NUM_STATIONS; i++) {
         stations[i].number = i + 1;
-        strcpy(stations[i].name, stationNames[i]);
+        strncpy(stations[i].name, stationNames[i], sizeof(stations[i].name) - 1);
+        stations[i].name[sizeof(stations[i].name) - 1] = '\0';  // Null-terminate the string
 
         if (i + 1 >= 1 && i + 1 <= 20) {
             stations[i].fare = 25.00;
@@ -43,16 +76,19 @@ int main() {
         }
     }
 
+    // Display welcome message
+    displayWelcomeMessage();
+
     int stationNumber;
     double totalFare = 0.00;
-    int remainingStations = numStations;
-
-    printf("Welcome to Bus Fare Calculator for Bus Line 124\n");
+    int remainingStations = NUM_STATIONS;
 
     // Prompt the user for the station number until Mahidol University is reached
     while (1) {
+        // Display the menu
+        displayMenu();
+
         // Get the station number from the user
-        printf("Enter the station number (1 to %d, 0 to exit): ", numStations);
         scanf("%d", &stationNumber);
 
         if (stationNumber == 0) {
@@ -61,7 +97,7 @@ int main() {
         }
 
         // Calculate the fare for the current station
-        double stationFare = calculateFare(stations, stationNumber, numStations);
+        double stationFare = calculateFare(stations, stationNumber, NUM_STATIONS);
 
         // Check if the station is valid
         if (stationFare > 0.00) {
@@ -72,17 +108,18 @@ int main() {
             remainingStations--;
 
             // Display the remaining stations and total fare
-            printf("Remaining stations: %d\n", remainingStations);
+            printf("\nRemaining stations: %d\n", remainingStations);
             printf("Fare for %s: %.2f baht\n", stations[stationNumber - 1].name, stationFare);
             printf("Total fare so far: %.2f baht\n", totalFare);
         } else {
-            printf("Cannot calculate fare. Please check the station number.\n");
+            printf("Invalid station number. Please try again.\n");
         }
     }
 
-    // Display the final total fare
-    printf("\nThank you for using Bus Fare Calculator.\n");
-    printf("Total fare for the journey: %.2f baht\n", totalFare);
+    // Display the final thank you message
+    displayThankYouMessage(totalFare);
 
     return 0;
 }
+
+
