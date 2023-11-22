@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 
 // Define a struct to represent a station
 typedef struct {
     int number;
+    char name[50];
     double fare;
 } Station;
 
@@ -21,8 +23,16 @@ int main() {
     Station stations[numStations];
 
     // Initialize station information
+    char *stationNames[numStations] = {
+        "Station1 : Sanam Luang (Thammasat U.)", "Station2 : Tha Phra Chan (Opposite WAT Mahathat)", "Station3 : Maharaj Pier", "Station4 : Wat Phra Kaew (Tha Chang Pier)",
+        "Station5 : Sanam Luang (Court Of Justice)", // ... Add more station names as needed
+        "Station31", "Station32", "Station33", "Station34", "Station35", // ... Add more station names as needed
+        "MahidolUniversity" // Example name for the last station
+    };
+
     for (int i = 0; i < numStations; i++) {
         stations[i].number = i + 1;
+        strcpy(stations[i].name, stationNames[i]);
 
         if (i + 1 >= 1 && i + 1 <= 20) {
             stations[i].fare = 25.00;
@@ -63,7 +73,7 @@ int main() {
 
             // Display the remaining stations and total fare
             printf("Remaining stations: %d\n", remainingStations);
-            printf("Fare for Station %d: %.2f baht\n", stationNumber, stationFare);
+            printf("Fare for %s: %.2f baht\n", stations[stationNumber - 1].name, stationFare);
             printf("Total fare so far: %.2f baht\n", totalFare);
         } else {
             printf("Cannot calculate fare. Please check the station number.\n");
