@@ -33,7 +33,18 @@ void displayWelcomeMessage() {
 // Function to display the menu
 void displayMenu() {
     printf("\n-------------------------------------------------\n");
-    printf("Enter the station number (1 to %d) or 0 to exit: ", NUM_STATIONS);
+    printf("Enter the station number (1 to %d), \n'0' to exit,  \n'-1' to view all stations\n:?? ", NUM_STATIONS);
+}
+
+// Function to display all stations
+void displayAllStations(const Station stations[], int numStations) {
+    printf("\n*************************************************\n");
+    printf("*                  ALL STATIONS                   *\n");
+    printf("*************************************************\n");
+    for (int i = 0; i < numStations; i++) {
+        printf("%d. %s\n", stations[i].number, stations[i].name);
+    }
+    printf("*************************************************\n\n");
 }
 
 // Function to display the final thank you message
@@ -51,14 +62,14 @@ int main() {
 
     // Initialize station information
     char stationNames[NUM_STATIONS][MAX_STATION_NAME_LENGTH] = {
-        "Station1 : Car launch station, Sanam Luang", "Station2 : Sanam Luang (opposite Thammasat University)", "Station3 : Sanam Luang (opposite Wat Mahathat)", "Station4 : Sanam Luang (opposite the Supreme Court) Stop 1",
-        "Station5 : Sanam Luang (opposite the Supreme Court) Stop 2", "Station6 : Phra Pinklao Bridge (outbound)", "Station7 : Opposite Pata Pinklao", "Station8 : Borommaratchachonnani Intersection",
-        "Station9 : Tesco Lotus Pinklao", "Station10 : Central Pinklao", "Station11 : Opposite Lumpini Pinklao Condo", "Station12 : Chao Phraya Hospital", "Station13 : Before reaching Sai Tai Pinklao",
-        "Station14 : Soi Borommaratchachonnani 35", "Station15 : Soi Borommaratchachonnani 45", "Station16 : Cedar Mansion", "Station17 : Taling Chan Police Station", "Station18 : Ratchaphruek-Boromarajonani Intersection 1",
-        "Station19 : Dusit District Court", "Station20 : Taling Chan Provincial Prosecutor's Office", "Station21 : Photisan School (Soi Wat Makok)", "Station22 : Piamrak Village", "Station23 : Sai Tai Mai Bus Terminal (Taling Chan)", "Station24 : Baan Phanu (Soi Borommaratchachonnani 91)",
-        "Station25 : Thonburi Hospital 2", "Station26 : Opposite Metropolitan Police Division 7", "Station27 : Opposite the Sky Parallel Police Station", "Station28 : Krisada Nakhon Village 20", "Station29 : Boonthavorn Borommaratchachonnani Shop", "Station30 : Opposite Amornchai Village 3",
-        "Station31 : Phutthamonthon Sai 3-Borommaratchachonnani (outbound)", "Station32 : Shrine, Ford Phutthamonthon", "Station33 : Opposite Ploy Kaew Kindergarten School", "Station34 : Ladawan Village", "Station35 : Dhamma Sabha Book Center", 
-        "Station36 : Opposite Suktawee Village", "Station37 : Soi Borommaratchachonnani 121, Pansaprueksa Village", "Station38 : Sakulthip Borommaratchachonnani Village 123", "Station39 : Buddhist Market,", "Station40 : Mahidol University, Salaya District, Gate 3", 
+        "Car launch station, Sanam Luang", "Sanam Luang (opposite Thammasat University)", "Sanam Luang (opposite Wat Mahathat)", "Sanam Luang (opposite the Supreme Court) Stop 1",
+        "Sanam Luang (opposite the Supreme Court) Stop 2", "Phra Pinklao Bridge (outbound)", "Opposite Pata Pinklao", "Borommaratchachonnani Intersection",
+        "Tesco Lotus Pinklao", "Central Pinklao", "Opposite Lumpini Pinklao Condo", "Chao Phraya Hospital", "Before reaching Sai Tai Pinklao",
+        "Soi Borommaratchachonnani 35", "Soi Borommaratchachonnani 45", "Cedar Mansion", "Taling Chan Police Station", "Ratchaphruek-Boromarajonani Intersection 1",
+        "Dusit District Court", "Taling Chan Provincial Prosecutor's Office", "Photisan School (Soi Wat Makok)", "Piamrak Village", "Sai Tai Mai Bus Terminal (Taling Chan)", "Baan Phanu (Soi Borommaratchachonnani 91)",
+        "Thonburi Hospital 2", "Opposite Metropolitan Police Division 7", "Opposite the Sky Parallel Police Station", "Krisada Nakhon Village 20", "Station29 : Boonthavorn Borommaratchachonnani Shop", "Opposite Amornchai Village 3",
+        "Phutthamonthon Sai 3-Borommaratchachonnani (outbound)", "Shrine, Ford Phutthamonthon", "Opposite Ploy Kaew Kindergarten School", "Ladawan Village", "Dhamma Sabha Book Center", 
+        "Opposite Suktawee Village", "Soi Borommaratchachonnani 121, Pansaprueksa Village", "Sakulthip Borommaratchachonnani Village 123", "Buddhist Market,", "Mahidol University, Salaya District, Gate 3", 
         "MahidolUniversity Gate 4" 
     };
 
@@ -81,45 +92,44 @@ int main() {
 
     int stationNumber;
     double totalFare = 0.00;
-    int remainingStations = NUM_STATIONS;
+    int remainingStations;
 
-    // Prompt the user for the station number until Mahidol University is reached
-    while (1) {
-        // Display the menu
-        displayMenu();
+// Prompt the user for the station number until Mahidol University is reached
+while (1) {
+    // Display the menu
+    displayMenu();
 
-        // Get the station number from the user
-        scanf("%d", &stationNumber);
+    // Get the station number from the user
+    scanf("%d", &stationNumber);
 
-        if (stationNumber == 0) {
-            // Exit the loop if the user enters 0
-            break;
-        }
-
-        // Calculate the fare for the current station
-        double stationFare = calculateFare(stations, stationNumber, NUM_STATIONS);
-
-        // Check if the station is valid
-        if (stationFare > 0.00) {
-            // Accumulate the total fare
-            totalFare += stationFare;
-
-            // Decrement the remaining stations
-            remainingStations--;
-
-            // Display the remaining stations and total fare
-            printf("\nRemaining stations: %d\n", remainingStations);
-            printf("Fare for %s: %.2f baht\n", stations[stationNumber - 1].name, stationFare);
-            printf("Total fare so far: %.2f baht\n", totalFare);
-        } else {
-            printf("Invalid station number. Please try again.\n");
-        }
+    if (stationNumber == 0) {
+        // Exit the loop if the user enters 0
+        break;
+    } else if (stationNumber == -1) {
+        // Display all stations if the user enters -1
+        displayAllStations(stations, NUM_STATIONS);
+        continue; // Skip the rest of the loop and prompt again
     }
+
+    // Calculate the fare for the current station
+double stationFare = calculateFare(stations, stationNumber, NUM_STATIONS);
+
+// Check if the station is valid
+if (stationFare > 0.00) {
+    // Accumulate the total fare
+    totalFare += stationFare;
+
+    // Display the remaining stations
+    printf("\nRemaining stations: %d\n", --remainingStations); // Decrement before displaying
+    printf("Fare for %s to Mahidol University:\n--- %.2f baht---", stations[stationNumber - 1].name, stationFare);
+    // Remove the line displaying total fare
+} else {
+    printf("Invalid station number. Please try again.\n");
+}
+}
 
     // Display the final thank you message
     displayThankYouMessage(totalFare);
 
     return 0;
 }
-
-
